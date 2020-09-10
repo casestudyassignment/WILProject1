@@ -3,6 +3,7 @@ install.packages("shiny", dependencies = TRUE)
 
 library(shinydashboard)
 library(shiny)
+library(readr)
 
 #UI
 
@@ -32,7 +33,15 @@ body <- dashboardBody(
       "Box content here", br(), "More box content",
       sliderInput("slider", "Slider input:", 1, 100, 50),
       textInput("text", "Text input:")
+    ),
+    
+    box(
+      title = "Table", status = "warning",solidHeader = TRUE,
+      collapsible = TRUE,
+      dataTableOutput('table')
     )
+    
+    
   )
 )
 
@@ -41,6 +50,20 @@ interface <- dashboardPage(header, sidebar, body)
 #SERVER SIDE 
 
 site <- function(input, output) { 
+  #import dataset
+  tbl <- read_csv("population.csv")
+  
+  output$table <- renderDataTable(tbl)
+  
+  #output$table.output <- renderTable({
+  #  mydata()
+  #})
+  
+  #output$plot1 <- renderPlot({
+  #  x <- tbl()[,1]
+  #  plot(x)
+  #})
+  
   set.seed(122)
   histdata <- rnorm(500)
   
