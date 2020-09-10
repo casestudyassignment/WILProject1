@@ -13,14 +13,37 @@ header <- dashboardHeader(title = "COVID-19 Finance Dashboard")
 sidebar <- dashboardSidebar(sidebarMenu(
   sidebarSearchForm(textId = "searchText", buttonId = "searchButton",
                     label = "Search..."),
-  menuItem("COVID Stocks", tabName = "COVID Stocks", icon = icon("chart-bar", lib = "font-awesome")),
-  menuItem("COVID Government", tabName = "COVID Government", icon = icon("book")),
-  menuItem("COVID Cryptocurrency", tabName = "COVID Cryptocurrency", icon = icon("money")),
-  menuItem("COVID Ecommerce", tabName = "COVID Ecommerce", icon = icon("shopping-cart", lib = "font-awesome")),
-  menuItem("COVID Banking", tabName = "COVID Banking", icon = icon("piggy-bank", lib = "font-awesome"))
+  menuItem("COVID Stocks", tabName = "COVID_Stocks", icon = icon("chart-bar", lib = "font-awesome")),
+  menuItem("COVID Government", tabName = "COVID_Government", icon = icon("book")),
+  menuItem("COVID Cryptocurrency", tabName = "COVID_Cryptocurrency", icon = icon("money")),
+  menuItem("COVID Ecommerce", tabName = "COVID_Ecommerce", icon = icon("shopping-cart", lib = "font-awesome")),
+  menuItem("COVID Banking", tabName = "COVID_Banking", icon = icon("piggy-bank", lib = "font-awesome"))
 ))
 
 body <- dashboardBody(
+  
+  tabItems(
+    tabItem(tabName = "COVID_Stocks",
+            h2("Stocks")
+    ),
+    
+    tabItem(tabName = "COVID_Government",
+            h2("Government/Employment")
+    ),
+    
+    tabItem(tabName = "COVID_Cryptocurrency",
+            h2("Cryptocurrency")
+    ),
+    
+    tabItem(tabName = "COVID_Ecommerce",
+            h2("E-commerce")
+    ),
+    
+    tabItem(tabName = "COVID_Banking",
+            h2("Banking")
+    )
+  ),
+  
   fluidRow(
     
     box(
@@ -40,8 +63,6 @@ body <- dashboardBody(
       collapsible = TRUE,
       dataTableOutput('table')
     )
-    
-    
   )
 )
 
