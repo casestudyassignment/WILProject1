@@ -4,6 +4,8 @@ install.packages("shiny", dependencies = TRUE)
 library(shinydashboard)
 library(shiny)
 
+#UI
+
 #splitting parts easier readability
 header <- dashboardHeader(title = "COVID-19 Finance Dashboard")
 
@@ -36,6 +38,7 @@ body <- dashboardBody(
 
 interface <- dashboardPage(header, sidebar, body)
 
+#SERVER SIDE 
 
 site <- function(input, output) { 
   set.seed(122)
