@@ -26,9 +26,13 @@ sidebar <- dashboardSidebar(sidebarMenu(
 body <- dashboardBody(
   tabItems(
     tabItem("Unemployment_Rate", 
-            fluidPage(
-              fluidRow("Charts"),
-              fluidRow("Description")
+            tabsetPanel(
+              tabPanel("Data Viewer", 
+                       fluidPage("Render dataset tables here")
+                       ),
+              tabPanel("Data Visualisation", 
+                       fluidPage("Render plots here")
+                       )
             )),
     tabItem(tabName = "COVID_Stocks",
             fluidRow(
@@ -75,7 +79,7 @@ interface <- dashboardPage(header, sidebar, body)
 
 site <- function(input, output) { 
   #import dataset
-  tbl <- read_csv("small_covid_data.csv")
+  tbl <- read_csv("data/small_covid_data.csv")
   
   output$table <- renderDataTable(tbl)
   
