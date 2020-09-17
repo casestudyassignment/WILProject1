@@ -1,0 +1,7 @@
+.tab-pane {
+  padding: 15px 0;
+}
+.data_viewer .dataTables_length,
+.data_viewer .dataTables_filter {
+  display: none;
+}
