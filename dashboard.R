@@ -1,11 +1,17 @@
-install.packages("shinydashboard", dependencies = TRUE)
-install.packages("shiny", dependencies = TRUE)
-
 library(shinydashboard)
 library(shiny)
 library(readr)
+library(dplyr)
+library(magrittr)
+library(ggplot2)
+library(tidyr)
+library(tidyverse)
+library(lubridate)
+library(data.table)
+library(xts)
+library(plyr)
+setwd("C:/GitHub/WILProject1")
 
-#UI
 
 #splitting parts easier readability
 header <- dashboardHeader(title = "COVID-19 Finance Dashboard")
@@ -13,6 +19,9 @@ header <- dashboardHeader(title = "COVID-19 Finance Dashboard")
 sidebar <- dashboardSidebar(sidebarMenu(
   sidebarSearchForm(textId = "searchText", buttonId = "searchButton",
                     label = "Search..."),
+  menuItem("Data Visualisation", tabName = "Data_Visualisation", icon = icon("chart-bar", lib = "font-awesome"),
+           startExpanded = TRUE,
+           menuSubItem("Unemployment Rate", tabName = "Unemployment_Rate")),
   menuItem("COVID Stocks", tabName = "COVID_Stocks", icon = icon("chart-bar", lib = "font-awesome")),
   menuItem("COVID Government", tabName = "COVID_Government", icon = icon("book")),
   menuItem("COVID Cryptocurrency", tabName = "COVID_Cryptocurrency", icon = icon("money")),
@@ -25,10 +34,11 @@ body <- dashboardBody(
     tabItem("Unemployment_Rate",
             tabsetPanel(
               tabPanel("Data Viewer",
-                       fluidPage("Render dataset tables here")
+                       fluidPage(box(title = "Unemployment Rate (2019)"), dataTableOutput('unemployment'),
+                                 box(title = "Unemployment Rate (COVID 2020)"), dataTableOutput('covid'))
                        ),
               tabPanel("Data Visualisation",
-                       fluidPage("Render plots here")
+                       fluidPage(box(title = "Unemployment Rate Comparison Plot"), plotOutput("covid_unemp_plot1"))
                        )
             )),
     tabItem(tabName = "COVID_Stocks",
@@ -76,9 +86,41 @@ interface <- dashboardPage(header, sidebar, body)
 
 site <- function(input, output) {
   #import dataset
-  tbl <- read_csv("data/small_covid_data.csv")
 
-  output$table <- renderDataTable(tbl)
+  unemployment <- read_csv("data/unemployment_rate_updated.csv")
+  covid <- read_csv("data/covid_clean.csv")
+  
+  #filtering out data from the clean dataset for only australia 
+  covid_subset <- covid[,c(1,7,11)]
+  covidAU_subset <- covid_subset  %>% filter(countries == "Australia")
+  names(covidAU_subset)[names(covidAU_subset) == "dateRep"] <- "release_date"
+  #joining covid dataset with unemployment
+  covid_unemp <- covidAU_subset %>% left_join(unemployment, by = "release_date")
+
+  #subsetting due to missing the first 20 rows 
+  covid_unemp_new <- covid_unemp[-c(1:20),]
+ 
+  #creating new column for data
+  covid_unemp_my <- covid_unemp_new %>% mutate(release_date=dmy(release_date), Month_yr = format_ISO8601(release_date, precision='ym'))
+  names(covid_unemp_my)[names(covid_unemp_my) == "Cumulative_number_for_14_days_of_COVID-19_cases_per_100000"] <- "Cumulative_number"
+  #new dataframe for time series data
+  covid_unemp <- covid_unemp_my %>% select(Month_yr, Unemployment_rate, Cumulative_number) %>%
+    gather(key = "variable", value = "value", -Month_yr)
+  
+  #ggplot 1
+  covid_unemp_plot1 <- ggplot(covid_unemp, aes(x=Month_yr, y = value)) + geom_line(aes(color = variable), size = 1) + scale_color_manual(values = c("#00AFBB", "#E7B800")) + theme_minimal()
+  
+  #plot 2
+    
+    
+  #outputting data tables
+  output$unemployment <- renderDataTable(unemployment)
+  output$covidAU_subset <- renderDataTable(covidAU_subset)
+  
+  #outputting data PLOTS
+  output$covid_unemp_plot1 <-renderPlot({covid_unemp_plot1})
+  #output$covid_unemp_plot2 <-renderPlot({covid_unemp_plot2})
+  
 
   #output$table.output <- renderTable({
   #  mydata()
@@ -99,3 +141,4 @@ site <- function(input, output) {
 }
 
 shinyApp(interface, site)
+
