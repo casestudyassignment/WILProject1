@@ -23,13 +23,20 @@ tab_government_visualisation <- tabItem(tabName = "dataVisGov",
                                                             )
                                                    ),
                                           tabPanel("Data Visualisation",
-                                                   fluidPage(box(title = "Unemployment Rate Comparison Plot",
+                                                   fluidRow(box(title = "Unemployment Rate Comparison Plot",
                                                                  width =12,
                                                                  status = "primary", 
                                                                  solidHeader = TRUE,
                                                                  collapsible = TRUE,
-                                                                 plotOutput("plotCovidUnemp"))
-                                                             )
+                                                                 plotOutput("govPlot1"))
+                                                             ),
+                                                   fluidRow(box(title = "Unemployment Rate Comparison Plot 2",
+                                                                width =12,
+                                                                status = "primary", 
+                                                                solidHeader = TRUE,
+                                                                collapsible = TRUE,
+                                                                plotOutput("govPlot2"))
+                                                            )
                                                    )
                                           )
                                         )
