@@ -30,7 +30,12 @@ tab_stocks_visualisation <- tabItem(tabName = "dataVisStocks",
                                       tabPanel("Data Visualisation",
                                                inputPanel(selectInput("SelectedStockPlot",
                                                                       label="Select one",
-                                                                      choices=c("Overall Stocks", "BTC Stock"))),
+                                                                      choices=c("Overall Stocks", 
+                                                                                "BTC Stock",
+                                                                                "CBA Stock",
+                                                                                "DOW Stock",
+                                                                                "DRE Stock",
+                                                                                "DRO Stock"))),
                                                fluidPage(
                                                  conditionalPanel(
                                                    condition = "input.SelectedStockPlot == 'Overall Stocks'",
@@ -44,6 +49,18 @@ tab_stocks_visualisation <- tabItem(tabName = "dataVisStocks",
                                                                 solidHeader = TRUE,
                                                                 collapsible = TRUE,
                                                                 plotOutput('plotStockBTC'))
+                                                            )
+                                                   ),
+                                                 conditionalPanel(
+                                                   condition = "input.SelectedStockPlot == 'CBA Stock'||
+                                                                input.SelectedStockPlot == 'DOW Stock'||
+                                                                input.SelectedStockPlot == 'DRE Stock'",
+                                                   fluidRow(box(title = "CBA Stocks Plot",
+                                                                width = 12,
+                                                                status = "primary", 
+                                                                solidHeader = TRUE,
+                                                                collapsible = TRUE,
+                                                                plotOutput('plotOtherStocks'))
                                                             )
                                                    )
                                                  )

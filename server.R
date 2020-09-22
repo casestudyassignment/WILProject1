@@ -17,7 +17,7 @@ source('servers/stockServer.R')
 
 
 server <- function(input, output) {
-  # GOVERNMENT PAGE SERVER
+  # GOVERNMENT PAGE SERVER ####################################################
   # Data tables
   output$tableGovUnemp <- renderDataTable(getDisplayGovUnemploymentData(), 
                                           options = list(pageLength = 5, 
@@ -35,23 +35,35 @@ server <- function(input, output) {
   
   
   
-  # STOCKS PAGE SERVER
+  # STOCKS PAGE SERVER #######################################################
   # Data tables
-  # Overall Tables
-  
-  # BTC Stock Tables
-  output$tableStockBTC <- renderDataTable(getCSV("BTC-AUD.csv"), 
+  output$tableStockBTC <- renderDataTable(getCSV("BTC-AUD.csv"), #BTC
                                           options = list(pageLength = 15, 
                                                          scrollX = TRUE)
   )
   
-  # Data Plots
-  # Overall Plots
+  # Data plots
+  output$plotStockBTC <-renderPlot({getStockBTCPlot()}) #BTC
   
-  # BTC Plots
-  output$plotStockBTC <-renderPlot({getStockBTCPlot()})
+  # Other than BTC Stock
+  SelectedStockPlot <- reactive({
+    strsplit(input$SelectedStockPlot, " ")[[1]][1]
+  }) 
+  output$plotOtherStocks <-renderPlot({getOtherCompanyStockPlot(SelectedStockPlot())}) #CBA
   
+  # Michelle's testing
+  #output$boxtest <- renderUI({
+  #  box(title = paste(SelectedStockPlot(), "Stocks Plot"),
+  #      width = 12,
+  #      status = "primary", 
+  #      solidHeader = TRUE,
+  #      collapsible = TRUE,
+  #      plotOutput("plotOtherStocks"))
+    #box(title = input$title, plotOutput("speed"))
+  #})
+ 
   
+  ############################################################################
   
   #output$table.output <- renderTable({
   #  mydata()
