@@ -59,21 +59,22 @@ getGovPlot1 <- function(input, output) {
 
 getGovPlot2 <- function(input, output) {
   covidData <- getCSV("au_covid.csv")
-  unemploymentData <- getDisplayGovUnemploymentData()
+  unemploymentData <- getCSV("unemployment_rate.csv")
+  
+  # Rename columns
+  names(unemploymentData)[names(unemploymentData) == "release_date"] <- "date"
+  names(unemploymentData)[names(unemploymentData) == "Unemployment rate"] <- "Unemployment_rate"
+  names(covidData)[names(covidData) == "Cumulative_number_for_14_days_of_COVID-19_cases_per_100000"] <- "Cumulative_number"
   
   covidData[is.na(covidData)] = 0
-  names(covidData)[names(covidData) == "Cumulative_number_for_14_days_of_COVID-19_cases_per_100000"] <- "Cumulative_number"
   unemploymentData <- unemploymentData[, c(1,2)]
-  #df_unemployment=rename(df_unemployment, date = release_date)
-  unemploymentData
   unemploymentData$date <- as.Date(paste(unemploymentData$date,"-01",sep=""))
-  
 
+  # Join tables
   df <- covidData %>% left_join(unemploymentData,by = "date")
+  
   df <- df[-c(1:20),]
-  
   df<-separate(df, "date", c("Year", "Month", "Day"), sep = "-")
-  
   df <- df %>%
     group_by(Month) %>%
     summarise_at(vars(countryCode), funs(mean(Unemployment_rate),mean(Cumulative_number)))
@@ -93,9 +94,8 @@ getGovPlot2 <- function(input, output) {
   # Rename Columns
   names(df)[names(df) == "mean..1"] <- "mean_unemployment_rate"
   names(df)[names(df) == "mean..2"] <- "mean_cumulative_number"
-  
-  barplot(df$mean_unemployment_rate, names.arg=df$Month, ylim=c(0,10), ylab="Unemployment Rates", xlab="Months")
-  
+ 
+  # Render plot
   cols <- c('red','blue')
   par(lwd=6)
   barplot(
@@ -114,3 +114,4 @@ getGovPlot2 <- function(input, output) {
   
   return(plot)
 }
+
