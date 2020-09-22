@@ -12,7 +12,7 @@ tab_crypto_visualisation <- tabItem(tabName = "dataVisCrypto",
                                                                       label="Select one",
                                                                       choices=c("BCH-AUD", "BNB-AUD", "BTC-AUD", "EOS-AUD", "ETH-AUD", 
                                                                                   "LINK-AUD", "LTC-AUD", "TRX-AUD", "USDT-AUD", "XRP-AUD"))),
-                                               fluidRow(conditionalPanel(
+                                               fluidPage(conditionalPanel(
                                                  condition = "input.SelectedCryptoTable != ''",
                                                  fluidRow(uiOutput("cryptoPlotTable")
                                                ))
@@ -23,7 +23,7 @@ tab_crypto_visualisation <- tabItem(tabName = "dataVisCrypto",
                                                                     label="Select one",
                                                                     choices=c("BCH-AUD", "BNB-AUD", "BTC-AUD", "EOS-AUD", "ETH-AUD", 
                                                                               "LINK-AUD", "LTC-AUD", "TRX-AUD", "USDT-AUD", "XRP-AUD"))),
-                                             fluidRow(conditionalPanel(
+                                             fluidPage(conditionalPanel(
                                                condition = "input.SelectedCryptoPlot != ''",
                                                fluidRow(uiOutput("cryptoPlot")
                                                ))

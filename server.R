@@ -39,33 +39,55 @@ server <- function(input, output) {
 
   # STOCKS PAGE SERVER #######################################################
   # Data tables
-  output$tableStockBTC <- renderDataTable(getCSV("BTC-AUD.csv"), #BTC
+  output$tableStockBTC <- renderDataTable(getCSV("BTC-AUD.csv"), 
                                           options = list(pageLength = 15,
-                                                         scrollX = TRUE)
+                                                         scrollX = TRUE) #BTC
   )
-
-  # Data plots
-  output$plotStockBTC <-renderPlot({getStockBTCPlot()}) #BTC
-
-  # Other than BTC Stock
-  SelectedStockPlot <- reactive({
-    strsplit(input$SelectedStockPlot, " ")[[1]][1]
-  })
-  output$plotOtherStocks <-renderPlot({getOtherCompanyStockPlot(SelectedStockPlot())})
   
-  output$stockPlotBox <- renderUI({
+  # Other than BTC Stock - Tables
+  SelectedStockTable <- reactive({
+    strsplit(input$SelectedStockTable, " ")[[1]][1]
+  })
+  output$otherStocksTable <-renderDataTable(getOtherCompanyStockTable(SelectedStockTable()),
+                                                                      options = list(pageLenth = 15,
+                                                                                     scrollX = TRUE))
+  
+  output$otherStockTableBox <- renderUI({
     validate(
-      need(SelectedStockPlot(), "Please enter a valid title!")
+      need(SelectedStockTable(), "Please enter a valid title!")
     )
-    box(title = paste(SelectedStockPlot(), "Stocks Plot"),
+    box(title = paste(SelectedStockTable(), "Stock Table"),
         width = 12,
         status = "primary",
         solidHeader = TRUE,
         collapsible = TRUE,
-        plotOutput("plotOtherStocks"))
+        dataTableOutput('otherStocksTable'))
   })
+  
 
-  #Crypto DataTable
+  # Data plots
+  output$plotStockBTC <-renderPlot({getStockBTCPlot()}) #BTC
+
+  # Other than BTC Stock - Charts
+  SelectedStockPlot <- reactive({
+    strsplit(input$SelectedStockPlot, " ")[[1]][1]
+  })
+  output$otherStocksPlot <-renderPlot({getOtherCompanyStockPlot(SelectedStockPlot())})
+  
+  output$otherStockPlotBox <- renderUI({
+    validate(
+      need(SelectedStockPlot(), "Please enter a valid title!")
+    )
+    box(title = paste(SelectedStockPlot(), "Stock Plot"),
+        width = 12,
+        status = "primary",
+        solidHeader = TRUE,
+        collapsible = TRUE,
+        plotOutput("otherStocksPlot"))
+  })
+  
+  # CRYPTOCURRENCY PAGE SERVER #######################################################
+  # Data Tables
   SelectedCryptoTable <- reactive({input$SelectedCryptoTable})
   output$cryptoData <- renderDataTable(getDisplayCryptoData(SelectedCryptoTable()),options = list(pageLength = 5,scrollX = TRUE))
   
@@ -81,7 +103,7 @@ server <- function(input, output) {
         dataTableOutput('cryptoData'))
   })
   
-  #Crypto Data Plot
+  #Data Plot
   SelectedCryptoPlot <-reactive({input$SelectedCryptoPlot})
   output$cryptoDataPlot <- renderPlot({getCryptoPlot(SelectedCryptoPlot())})
   

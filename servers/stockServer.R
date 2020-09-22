@@ -64,7 +64,7 @@ getStockBTCPlot <- function(input, output){
   return(plot)
 }
 
-getOtherCompanyStockPlot <- function(input, output){
+getOtherCompanyStockTable <- function(input, output){
   # Get data
   covidData <- getCSV("au_covid.csv")
   stockData <- getCSV("Stocks.csv")
@@ -104,7 +104,12 @@ getOtherCompanyStockPlot <- function(input, output){
   
   # Filter the company's name
   df <- filter(df, Ticker == input) #filter for each company
-  df
+  
+  return(df)
+}
+
+getOtherCompanyStockPlot <- function(input, output){
+  df <- getOtherCompanyStockTable(input)
   
   # Generate plot
   cols <- c('red','blue');
