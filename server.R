@@ -10,6 +10,7 @@ library(data.table)
 library(xts)
 library(plyr)
 library(DT)
+library(tidyquant)
 
 source('servers/util.R')
 source('servers/governmentServer.R')
@@ -65,10 +66,36 @@ server <- function(input, output) {
   })
 
   #Crypto DataTable
-  output$cryptoData <- renderDataTable(getDisplayCryptoData(),options = list(pageLength = 5,scrollX = TRUE))
-  #Crypto Plot
-  output$cryptoPlot <- renderPlot({getCryptoPlot()})
+  SelectedCryptoTable <- reactive({input$SelectedCryptoTable})
+  output$cryptoData <- renderDataTable(getDisplayCryptoData(SelectedCryptoTable()),options = list(pageLength = 5,scrollX = TRUE))
   
+  output$cryptoPlotTable <- renderUI({
+    validate(
+      need(SelectedCryptoTable(), "Please enter a valid title!")
+    )
+    box(title = SelectedCryptoTable(),
+        width = 12,
+        status = "primary", 
+        solidHeader = TRUE,
+        collapsible = TRUE,
+        dataTableOutput('cryptoData'))
+  })
+  
+  #Crypto Data Plot
+  SelectedCryptoPlot <-reactive({input$SelectedCryptoPlot})
+  output$cryptoDataPlot <- renderPlot({getCryptoPlot(SelectedCryptoPlot())})
+  
+  output$cryptoPlot <- renderUI({
+    validate(
+      need(SelectedCryptoPlot(), "Please enter a valid title!")
+    )
+    box(title = paste(SelectedCryptoPlot(), "Cryptocurrency visualisations (2020)"),
+        width =12,
+        status = "primary", 
+        solidHeader = TRUE,
+        collapsible = TRUE,
+        plotOutput("cryptoDataPlot"))
+  })
 
 
   ############################################################################
