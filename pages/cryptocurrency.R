@@ -8,26 +8,29 @@ tab_crypto_visualisation <- tabItem(tabName = "dataVisCrypto",
                                     tabsetPanel(
                                       tabPanel("Data Viewer",
                                                class = "data_viewer",
-                                               fluidRow(box(title = "Cryptocurrency Rate (2019)",
-                                                            width = 12,
-                                                            status = "primary", 
-                                                            solidHeader = TRUE,
-                                                            collapsible = TRUE,
-                                                            dataTableOutput('cryptoData'))
-                                               )
-                                      ),
-                                      tabPanel("Data Visualisation",
-                                               fluidRow(box(title = "Cryptocurrency Predictions (2020)",
-                                                            width =12,
-                                                            status = "primary", 
-                                                            solidHeader = TRUE,
-                                                            collapsible = TRUE,
-                                                            plotOutput("cryptoPlot"))
-                                               )
+                                               inputPanel(selectInput("SelectedCryptoTable",
+                                                                      label="Select one",
+                                                                      choices=c("BCH-AUD", "BNB-AUD", "BTC-AUD", "EOS-AUD", "ETH-AUD", 
+                                                                                  "LINK-AUD", "LTC-AUD", "TRX-AUD", "USDT-AUD", "XRP-AUD"))),
+                                               fluidRow(conditionalPanel(
+                                                 condition = "input.SelectedCryptoTable != ''",
+                                                 fluidRow(uiOutput("cryptoPlotTable")
+                                               ))
                                       )
+                                    ),
+                                    tabPanel("Data Visualisation",
+                                             inputPanel(selectInput("SelectedCryptoPlot",
+                                                                    label="Select one",
+                                                                    choices=c("BCH-AUD", "BNB-AUD", "BTC-AUD", "EOS-AUD", "ETH-AUD", 
+                                                                              "LINK-AUD", "LTC-AUD", "TRX-AUD", "USDT-AUD", "XRP-AUD"))),
+                                             fluidRow(conditionalPanel(
+                                               condition = "input.SelectedCryptoPlot != ''",
+                                               fluidRow(uiOutput("cryptoPlot")
+                                               ))
                                     )
+    )
+  )
 )
-
 
 tab_crypto_modelling <- tabItem(tabName = "dataModelCrypto",
                                 h2("Data Modelling for Covid Government Crypto Currency")
