@@ -14,6 +14,7 @@ library(DT)
 source('servers/util.R')
 source('servers/governmentServer.R')
 source('servers/stockServer.R')
+source('servers/cryptoServer.R')
 
 
 server <- function(input, output) {
@@ -51,7 +52,10 @@ server <- function(input, output) {
   # BTC Plots
   output$plotStockBTC <-renderPlot({getStockBTCPlot()})
   
-  
+  #Crypto DataTable 
+  output$cryptoData <- renderDataTable(getDisplayCryptoData(),options = list(pageLength = 5,scrollX = TRUE))
+  #Crypto Plot
+  output$cryptoPlot <- renderPlot({getCryptoPlot()})
   
   #output$table.output <- renderTable({
   #  mydata()
