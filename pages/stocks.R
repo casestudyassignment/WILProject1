@@ -55,13 +55,7 @@ tab_stocks_visualisation <- tabItem(tabName = "dataVisStocks",
                                                    condition = "input.SelectedStockPlot == 'CBA Stock'||
                                                                 input.SelectedStockPlot == 'DOW Stock'||
                                                                 input.SelectedStockPlot == 'DRE Stock'",
-                                                   fluidRow(box(title = "CBA Stocks Plot",
-                                                                width = 12,
-                                                                status = "primary", 
-                                                                solidHeader = TRUE,
-                                                                collapsible = TRUE,
-                                                                plotOutput('plotOtherStocks'))
-                                                            )
+                                                   fluidRow(uiOutput("stockPlotBox"))
                                                    )
                                                  )
                                                )

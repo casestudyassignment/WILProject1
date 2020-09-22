@@ -52,15 +52,17 @@ server <- function(input, output) {
   output$plotOtherStocks <-renderPlot({getOtherCompanyStockPlot(SelectedStockPlot())}) #CBA
   
   # Michelle's testing
-  #output$boxtest <- renderUI({
-  #  box(title = paste(SelectedStockPlot(), "Stocks Plot"),
-  #      width = 12,
-  #      status = "primary", 
-  #      solidHeader = TRUE,
-  #      collapsible = TRUE,
-  #      plotOutput("plotOtherStocks"))
-    #box(title = input$title, plotOutput("speed"))
-  #})
+  output$stockPlotBox <- renderUI({
+    validate(
+      need(SelectedStockPlot(), "Please enter a valid title!")
+    )
+    box(title = paste(SelectedStockPlot(), "Stocks Plot"),
+        width = 12,
+        status = "primary", 
+        solidHeader = TRUE,
+        collapsible = TRUE,
+        plotOutput("plotOtherStocks"))
+  })
  
   
   ############################################################################
