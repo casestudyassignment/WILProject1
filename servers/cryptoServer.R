@@ -10,6 +10,7 @@ library(data.table)
 library(xts)
 library(plyr)
 library(DT)
+library(tidyquant)
 
 source('servers/util.R')
 
@@ -19,7 +20,8 @@ getDisplayCryptoData <- function(input, output){
   
   #cur = currency_list[1]
   
-  data <- read_csv(paste0("data/", cur, "_low.csv"))
+  # data <- read_csv(paste0("data/", cur, "_low.csv"))
+  data <- read_csv("data/BCH-AUD_low.csv")
   
   return(data)
 }

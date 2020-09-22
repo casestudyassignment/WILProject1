@@ -50,13 +50,8 @@ server <- function(input, output) {
   SelectedStockPlot <- reactive({
     strsplit(input$SelectedStockPlot, " ")[[1]][1]
   })
-  output$plotOtherStocks <-renderPlot({getOtherCompanyStockPlot(SelectedStockPlot())}) #CBA
-
-  #Crypto DataTable
-  output$cryptoData <- renderDataTable(getDisplayCryptoData(),options = list(pageLength = 5,scrollX = TRUE))
-  #Crypto Plot
-  output$cryptoPlot <- renderPlot({getCryptoPlot()})
-  # Michelle's testing
+  output$plotOtherStocks <-renderPlot({getOtherCompanyStockPlot(SelectedStockPlot())})
+  
   output$stockPlotBox <- renderUI({
     validate(
       need(SelectedStockPlot(), "Please enter a valid title!")
@@ -68,6 +63,12 @@ server <- function(input, output) {
         collapsible = TRUE,
         plotOutput("plotOtherStocks"))
   })
+
+  #Crypto DataTable
+  output$cryptoData <- renderDataTable(getDisplayCryptoData(),options = list(pageLength = 5,scrollX = TRUE))
+  #Crypto Plot
+  output$cryptoPlot <- renderPlot({getCryptoPlot()})
+  
 
 
   ############################################################################
