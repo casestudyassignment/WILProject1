@@ -215,14 +215,15 @@ getPredictionStockPlot <- function(input, output){
   cases_max <- max(df$New_cases, na.rm = TRUE)
   line2_max <- max(line2, na.rm = TRUE)
   ratio_val <- cases_max/line2_max
-
+  
+  
   plot <- ggplot(df, aes(x = Date))+
     geom_line(aes(y = line1, color = "Actual")) +
     geom_line(aes(y = line2, color = "Predicted")) +
     xlab("Date") + 
-    geom_line(aes(y = New_cases/ratio_val, color = "New Cases")) +
+    geom_line(aes(y = New_cases/ratio_val, color = "New Cases"), color="#b3b3b3") +
     scale_y_continuous(name="Stock Price", sec.axis = sec_axis(~.*ratio_val, name="New Cases")) + 
-    geom_vline(data = lockdown_stage, mapping=aes(xintercept=date), color="grey") +
+    geom_vline(data = lockdown_stage, mapping=aes(xintercept=date), color="#fc9f1c", linetype="dashed") +
     geom_text(data=lockdown_stage, mapping=aes(x=date, y=y, label=stage), size=3, angle=90, vjust=-0.4, hjust=0)
   plot
   return(plot)
