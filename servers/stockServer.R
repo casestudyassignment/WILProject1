@@ -199,8 +199,6 @@ getPredictionStockPlot <- function(input, output){
   names(cases)[names(cases) == "Date_reported"] <- "Date"
   
   df <- stock %>% left_join(cases,by = "Date")
-
-  title <- paste(input, "Stock Price Prediction")
   
   filtered_df <- select(df,contains(input))
   line1 <- round(as.double(unlist(filtered_df[,1])), 2)
@@ -219,7 +217,6 @@ getPredictionStockPlot <- function(input, output){
   ratio_val <- cases_max/line2_max
 
   plot <- ggplot(df, aes(x = Date))+
-    ggtitle(title) +
     geom_line(aes(y = line1, color = "Actual")) +
     geom_line(aes(y = line2, color = "Predicted")) +
     xlab("Date") + 

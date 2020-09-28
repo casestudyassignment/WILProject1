@@ -127,7 +127,7 @@ server <- function(input, output) {
     validate(
       need(SelectedStockPrediction(), "Pleas select one stock")
     )
-    box(title = paste(SelectedStockPrediction(), "Stock Prediction"),
+    box(title = paste(SelectedStockPrediction(), "Stock Price Prediction"),
         width = 12,
         status = "primary",
         solidHeader = TRUE,
@@ -138,7 +138,7 @@ server <- function(input, output) {
   # CRYPTOCURRENCY PAGE SERVER #######################################################
   # Data Tables
   SelectedCryptoTable <- reactive({input$SelectedCryptoTable})
-  output$cryptoData <- renderDataTable(getDisplayCryptoData(SelectedCryptoTable()),options = list(pageLength = 5,scrollX = TRUE))
+  output$cryptoData <- renderDataTable(getDisplayCryptoData(SelectedCryptoTable()),options = list(pageLength = 10, scrollX = TRUE))
   
   output$cryptoPlotTable <- renderUI({
     validate(
