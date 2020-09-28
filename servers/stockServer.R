@@ -191,3 +191,42 @@ getOtherCompanyStockPlot1 <- function(input, output){
   
   return(plot)
 }
+
+# Get stock prediction plot
+getPredictionStockPlot <- function(input, output){
+  stock <- getCSV("predicted_stocks.csv")
+  cases <- getCSV("covid_cases.csv")
+  names(cases)[names(cases) == "Date_reported"] <- "Date"
+  
+  df <- stock %>% left_join(cases,by = "Date")
+
+  title <- paste(input, "Stock Price Prediction")
+  
+  filtered_df <- select(df,contains(input))
+  line1 <- round(as.double(unlist(filtered_df[,1])), 2)
+  line2 <- round(as.double(unlist(filtered_df[,2])), 2)
+  
+  mean_value <- mean(line2)
+  
+  lockdown_stage <- data.frame(
+    date = as.Date(c("2020-01-25", "2020-03-23", "2020-03-25", "2020-07-07", "2020-08-03")),
+    stage = c("First Covid Case", "Stage 1", "Stage 2", "Stage 3", "Stage 4"),
+    y = c(mean_value, mean_value, mean_value+1, mean_value, mean_value)
+  )
+  
+  cases_max <- max(df$New_cases, na.rm = TRUE)
+  line2_max <- max(line2, na.rm = TRUE)
+  ratio_val <- cases_max/line2_max
+
+  plot <- ggplot(df, aes(x = Date))+
+    ggtitle(title) +
+    geom_line(aes(y = line1, color = "Actual")) +
+    geom_line(aes(y = line2, color = "Predicted")) +
+    xlab("Date") + 
+    geom_line(aes(y = New_cases/ratio_val, color = "New Cases")) +
+    scale_y_continuous(name="Stock Price", sec.axis = sec_axis(~.*ratio_val, name="New Cases")) + 
+    geom_vline(data = lockdown_stage, mapping=aes(xintercept=date), color="grey") +
+    geom_text(data=lockdown_stage, mapping=aes(x=date, y=y, label=stage), size=3, angle=90, vjust=-0.4, hjust=0)
+  plot
+  return(plot)
+}
