@@ -33,5 +33,17 @@ tab_crypto_visualisation <- tabItem(tabName = "dataVisCrypto",
 )
 
 tab_crypto_modelling <- tabItem(tabName = "dataModelCrypto",
-                                h2("Data Modelling for Covid Government Crypto Currency")
-)
+                                h2("Data Modelling for Covid Government Crypto Currency"),
+                                fluidPage(
+                                  selectInput("CM",label = "Select one:",
+                                              c("BCH-AUD", "BNB-AUD", "BTC-AUD", "EOS-AUD", "ETH-AUD", 
+                                              "LINK-AUD", "LTC-AUD", "TRX-AUD", "USDT-AUD", "XRP-AUD")),
+                                  conditionalPanel(
+                                    condition = "input.CM != ''",
+                                    fluidRow(uiOutput("selected_crypto")
+                                    )
+                                )
+                                
+                                #showing the text results
+                            )
+                        )
