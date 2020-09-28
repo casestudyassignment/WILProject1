@@ -44,6 +44,5 @@ tab_crypto_modelling <- tabItem(tabName = "dataModelCrypto",
                                     )
                                 )
                                 
-                                #showing the text results
                             )
                         )
