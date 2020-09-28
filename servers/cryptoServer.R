@@ -16,6 +16,7 @@ source('servers/util.R')
 
 getDisplayCryptoData <- function(input, output){
   data <- read_csv(paste0("data/", input, "_low.csv"))
+
   return(data)
 }
 
@@ -23,21 +24,21 @@ getDisplayCryptoCM <- function(input, output){
   data <- readLines(paste0("data/", input, "_low.txt"))
   splitText <- stringi::stri_split(str = data, regex = '\n')
   replacedText <- lapply(splitText, p)
-  
+
   return(replacedText)
 }
 
 getCryptoPlot <- function(input, output) {
   # Get data
   cryptoData <- getDisplayCryptoData(input)
-  
+
   # cryptoplot
   cryptoPlot <- cryptoData %>%
     ggplot(aes(x = date, y = close)) +
-    labs(title="cryptoData", x = "Date 2020", y = "close price (AUD)") +
+    labs(x = "Date 2020", y = "close price (AUD)") +
     geom_point(data = cryptoData[cryptoData$test != 'training',], aes(colour = test)) +
     geom_line() +
     coord_x_date(xlim = c("2020-01-01", "2020-09-01"))
-  
+
   return(cryptoPlot)
 }

@@ -117,10 +117,28 @@ server <- function(input, output) {
         plotOutput("otherStocksPlot3"))
   })
   
+  # Stock Prediction
+  SelectedStockPrediction <- reactive({
+    strsplit(input$SelectedStockPrediction, " ")[[1]][1]
+  })
+  
+  output$predictionStockPlot <- renderPlot({getPredictionStockPlot(SelectedStockPrediction())})
+  output$predictionStockPlotBox <- renderUI({
+    validate(
+      need(SelectedStockPrediction(), "Pleas select one stock")
+    )
+    box(title = paste(SelectedStockPrediction(), "Stock Price Prediction"),
+        width = 12,
+        status = "primary",
+        solidHeader = TRUE,
+        collapsible = TRUE,
+        plotOutput("predictionStockPlot"))
+  })
+  
   # CRYPTOCURRENCY PAGE SERVER #######################################################
   # Data Tables
   SelectedCryptoTable <- reactive({input$SelectedCryptoTable})
-  output$cryptoData <- renderDataTable(getDisplayCryptoData(SelectedCryptoTable()),options = list(pageLength = 5,scrollX = TRUE))
+  output$cryptoData <- renderDataTable(getDisplayCryptoData(SelectedCryptoTable()),options = list(pageLength = 10, scrollX = TRUE))
   
   output$cryptoPlotTable <- renderUI({
     validate(
