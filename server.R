@@ -39,6 +39,11 @@ server <- function(input, output) {
 
   # STOCKS PAGE SERVER #######################################################
   # Data tables
+  output$tableStockOverall <- renderDataTable(getOverallTable(), 
+                                          options = list(pageLength = 15,
+                                                         scrollX = TRUE) #Overall
+  )
+  
   output$tableStockBTC <- renderDataTable(getCSV("BTC-AUD.csv"), 
                                           options = list(pageLength = 15,
                                                          scrollX = TRUE) #BTC
@@ -72,18 +77,44 @@ server <- function(input, output) {
   SelectedStockPlot <- reactive({
     strsplit(input$SelectedStockPlot, " ")[[1]][1]
   })
-  output$otherStocksPlot <-renderPlot({getOtherCompanyStockPlot(SelectedStockPlot())})
   
-  output$otherStockPlotBox <- renderUI({
+  output$otherStocksPlot1 <-renderPlot({getOtherCompanyStockPlot1(SelectedStockPlot())})
+  output$otherStockPlotBox1 <- renderUI({
     validate(
       need(SelectedStockPlot(), "Please enter a valid title!")
     )
-    box(title = paste(SelectedStockPlot(), "Stock Plot"),
+    box(title = paste(SelectedStockPlot(), "Stock Plot 1"),
         width = 12,
         status = "primary",
         solidHeader = TRUE,
         collapsible = TRUE,
-        plotOutput("otherStocksPlot"))
+        plotOutput("otherStocksPlot1"))
+  })
+  
+  output$otherStocksPlot2 <-renderPlot({getOtherCompanyStockPlot2(SelectedStockPlot())})
+  output$otherStockPlotBox2 <- renderUI({
+    validate(
+      need(SelectedStockPlot(), "Please enter a valid title!")
+    )
+    box(title = paste(SelectedStockPlot(), "Stock Plot 2"),
+        width = 12,
+        status = "primary",
+        solidHeader = TRUE,
+        collapsible = TRUE,
+        plotOutput("otherStocksPlot2"))
+  })
+  
+  output$otherStocksPlot3 <-renderPlot({getOtherCompanyStockPlot3(SelectedStockPlot())})
+  output$otherStockPlotBox3 <- renderUI({
+    validate(
+      need(SelectedStockPlot(), "Please enter a valid title!")
+    )
+    box(title = paste(SelectedStockPlot(), "Stock Plot 3"),
+        width = 12,
+        status = "primary",
+        solidHeader = TRUE,
+        collapsible = TRUE,
+        plotOutput("otherStocksPlot3"))
   })
   
   # CRYPTOCURRENCY PAGE SERVER #######################################################

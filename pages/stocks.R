@@ -18,7 +18,13 @@ tab_stocks_visualisation <- tabItem(tabName = "dataVisStocks",
                                                fluidPage(
                                                  conditionalPanel(
                                                    condition = "input.SelectedStockTable == 'Overall Stocks'",
-                                                   h2("Overall Stocks Tables is selected")
+                                                   fluidRow(box(title = "Overall Stocks",
+                                                                width = 12,
+                                                                status = "primary", 
+                                                                solidHeader = TRUE,
+                                                                collapsible = TRUE,
+                                                                dataTableOutput('tableStockOverall'))
+                                                            )
                                                    ),
                                                  conditionalPanel(
                                                    condition = "input.SelectedStockTable == 'BTC Stock'",
@@ -31,8 +37,10 @@ tab_stocks_visualisation <- tabItem(tabName = "dataVisStocks",
                                                             )
                                                    ),
                                                  conditionalPanel(
-                                                   condition = "input.SelectedStockTable != 'Overall Stock' &&
-                                                                input.SelectedStockTable != 'BTC Stock'",
+                                                   condition = "input.SelectedStockTable == 'CBA Stock' ||
+                                                                input.SelectedStockTable == 'DOW Stock' ||
+                                                                input.SelectedStockTable == 'DRE Stock' ||
+                                                                input.SelectedStockTable == 'DRO Stock'",
                                                    fluidRow(uiOutput("otherStockTableBox"))
                                                    )
                                                  )
@@ -40,17 +48,12 @@ tab_stocks_visualisation <- tabItem(tabName = "dataVisStocks",
                                       tabPanel("Data Visualisation",
                                                inputPanel(selectInput("SelectedStockPlot",
                                                                       label="Select one",
-                                                                      choices=c("Overall Stocks", 
-                                                                                "BTC Stock",
+                                                                      choices=c("BTC Stock",
                                                                                 "CBA Stock",
                                                                                 "DOW Stock",
                                                                                 "DRE Stock",
                                                                                 "DRO Stock"))),
                                                fluidPage(
-                                                 conditionalPanel(
-                                                   condition = "input.SelectedStockPlot == 'Overall Stocks'",
-                                                   h2("Overall Stocks Plots is selected")
-                                                   ),
                                                  conditionalPanel(
                                                    condition = "input.SelectedStockPlot == 'BTC Stock'",
                                                    fluidRow(box(title = "BTC Stocks Plot",
@@ -62,9 +65,13 @@ tab_stocks_visualisation <- tabItem(tabName = "dataVisStocks",
                                                             )
                                                    ),
                                                  conditionalPanel(
-                                                   condition = "input.SelectedStockPlot != 'Overall Stock' &&
-                                                                input.SelectedStockPlot != 'BTC Stock'",
-                                                   fluidRow(uiOutput("otherStockPlotBox"))
+                                                   condition = "input.SelectedStockPlot == 'CBA Stock' ||
+                                                                input.SelectedStockPlot == 'DOW Stock' ||
+                                                                input.SelectedStockPlot == 'DRE Stock' ||
+                                                                input.SelectedStockPlot == 'DRO Stock'",
+                                                   fluidRow(uiOutput("otherStockPlotBox1")),
+                                                   #fluidRow(uiOutput("otherStockPlotBox2")),
+                                                   fluidRow(uiOutput("otherStockPlotBox3"))
                                                    )
                                                  )
                                                )

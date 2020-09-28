@@ -10,9 +10,10 @@ library(data.table)
 library(xts)
 library(plyr)
 library(DT)
+library(plotly)
+library(quantmod)
 
 source('servers/util.R')
-
 
 getStockBTCPlot <- function(input, output){
   covidData <- getCSV("au_covid.csv")
@@ -108,7 +109,7 @@ getOtherCompanyStockTable <- function(input, output){
   return(df)
 }
 
-getOtherCompanyStockPlot <- function(input, output){
+getOtherCompanyStockPlot3 <- function(input, output){
   df <- getOtherCompanyStockTable(input)
   
   # Generate plot
@@ -128,4 +129,65 @@ getOtherCompanyStockPlot <- function(input, output){
   );
   
   return(plot);
+}
+
+getOverallTable <- function(input, output){
+  # Get data
+  stockData <- getXLSX("Stocks.xlsx")
+  covidData <- getCSV("covid_clean.csv")
+  
+  stockData$Date <-as.Date(as.character(stockData$Date),"%Y%m%d")
+  stockData$Date <-as.Date(stockData$Date,"%d-%m%-Y")
+  names(stockData)[names(stockData) == "Date"] <- "date"
+  
+  covidData <- covidData[,c(1,7,11)]
+  covidData <- covidData %>% filter(countries == "Australia")
+  names(covidData)[names(covidData) == "dateRep"] <- "date"
+  covidData$date <-as.Date(covidData$date,"%d-%m-%Y")
+  
+  # Merge data
+  df <- covidData %>%left_join(stockData,by="date")
+  df <- na.omit(df)
+  
+  return(df)
+}
+
+getFilterOverallTable <- function(input, output){
+  df <- getOverallTable()
+  
+  #filter out ticker
+  df <- filter(df, Ticker == input) 
+  return(df)
+}
+
+getOtherCompanyStockPlot2 <- function(input, output){
+  df <- getFilterOverallTable(input)
+  
+  plot <- plot_ly(df, x = ~date, type="candlestick",
+                  open = ~Open, close = ~Close,
+                  high = ~High, low = ~Low) 
+  
+  #plot <- df %>% plot_ly(x = ~date, type="candlestick",
+  #                      open = ~Open, close = ~Close,
+  #                      high = ~High, low = ~Low) 
+  #plot <- plot %>% layout(title = "Basic Candlestick Chart",
+  #                      xaxis = list(rangeslider = list(visible = F)))
+  
+  return(plot)
+}
+
+getOtherCompanyStockPlot1 <- function(input, output){
+  df <- getFilterOverallTable("CBA")
+  
+  plot <- ggplot(df, aes(x = date))+
+    ggtitle("XNT Stock against Covid-19") +
+    geom_line(aes(y = df$Open, color = "Open")) +
+    geom_line(aes(y = df$Close, color = "Close")) +
+    xlab("Date") + ylab("Stock Price") +
+    theme(plot.title = element_text(hjust = 0.5), panel.border = element_blank()) +
+    scale_x_date(breaks = "1 day",) +
+    theme(axis.text.x=element_text(angle=45,hjust=1)) +
+    scale_colour_manual("Series", values=c("Open"="gray40", "Close"="firebrick4"))
+  
+  return(plot)
 }
