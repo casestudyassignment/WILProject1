@@ -1,0 +1,9 @@
+[[17 25]
+ [ 3  3]]
+F1 score (weighted): 0.5018975332068311
+F1 score (macro): 0.36242884250474383
+F1 score (micro): 0.4166666666666667
+cohen's Kappa: -0.03703703703703698
+precision of class 0 = 0.4
+precision of class 1 = 0.5
+precision avg: 0.45

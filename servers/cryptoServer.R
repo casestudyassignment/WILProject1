@@ -16,10 +16,17 @@ source('servers/util.R')
 
 getDisplayCryptoData <- function(input, output){
   data <- read_csv(paste0("data/", input, "_low.csv"))
+  splitText <- stringi::stri_split(str = data, regex = '\n')
+  replacedText <- lapply(splitText, p)
+  
+  return(replacedText)
+}
+
+getDisplayCryptoCM <- function(input, output){
+  data <- readLines(paste0("data/", input, "_low.txt"))
   
   return(data)
 }
-
 
 getCryptoPlot <- function(input, output) {
   # Get data

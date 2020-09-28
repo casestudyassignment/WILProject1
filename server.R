@@ -118,6 +118,11 @@ server <- function(input, output) {
         collapsible = TRUE,
         plotOutput("cryptoDataPlot"))
   })
+  
+  
+  #data modelling
+  SelectedCryptoCM <-reactive({input$CM})
+  output$selected_crypto <- renderUI({getDisplayCryptoCM(SelectedCryptoCM())})
 
 
   ############################################################################
