@@ -11,6 +11,7 @@ library(xts)
 library(plyr)
 library(DT)
 library(tidyquant)
+library(PerformanceAnalytics)
 
 source('servers/util.R')
 source('servers/governmentServer.R')
@@ -153,25 +154,59 @@ server <- function(input, output) {
   })
   
   #Data Plot
-  SelectedCryptoPlot <-reactive({input$SelectedCryptoPlot})
-  output$cryptoDataPlot <- renderPlot({getCryptoPlot(SelectedCryptoPlot())})
+  #SelectedCryptoPlot <-reactive({input$SelectedCryptoPlot})
+  #output$cryptoDataPlot <- renderPlot({getCryptoPlot(SelectedCryptoPlot())})
   
-  output$cryptoPlot <- renderUI({
-    validate(
-      need(SelectedCryptoPlot(), "Please enter a valid title!")
-    )
-    box(title = paste(SelectedCryptoPlot(), "Cryptocurrency visualisations (2020)"),
-        width =12,
-        status = "primary", 
-        solidHeader = TRUE,
-        collapsible = TRUE,
-        plotOutput("cryptoDataPlot"))
-  })
+  #output$cryptoPlot <- renderUI({
+  #  validate(
+  #    need(SelectedCryptoPlot(), "Please enter a valid title!")
+  #  )
+  #  box(title = paste(SelectedCryptoPlot(), "Cryptocurrency visualisations (2020)"),
+  #      width =12,
+  #      status = "primary", 
+  #      solidHeader = TRUE,
+  #      collapsible = TRUE,
+  #      plotOutput("cryptoDataPlot"))
+  #})
   
   
   #data modelling
-  SelectedCryptoCM <-reactive({input$CM})
-  output$selected_crypto <- renderUI({getDisplayCryptoCM(SelectedCryptoCM())})
+  SelectedCryptoCM <-reactive({input$SelectedCryptoCM})
+  
+  output$cryptoPlotPrediction <- renderPlot({getCryptoPlotPrediction(SelectedCryptoCM())})
+  #output$cryptoInfoPrediction <- renderUI({getDisplayCryptoCM(SelectedCryptoCM())})
+  output$cryptoConfusionMatrix <- renderPlot({
+    textplot(  
+      capture.output(   
+        getCryptoConfusionMatrix(SelectedCryptoCM()) 
+      ),
+      cex=1.2
+    ) 
+  })
+  #output$cryptoConfusionMatrix <- renderDataTable({
+  #  data.frame(
+  #    capture.output(
+  #      getCryptoConfusionMatrix(SelectedCryptoCM())
+  #    )
+  #  )
+  #})
+    
+  
+  output$cryptoPlotPredictionBox <- renderUI({
+    validate(
+      need(SelectedCryptoCM(), "Please enter a valid title!")
+    )
+    box(title = paste(SelectedCryptoCM(), "Cryptocurrency visualisations (2020)"),
+        width = 12,
+        status = "primary", 
+        solidHeader = TRUE,
+        collapsible = TRUE,
+        plotOutput("cryptoPlotPrediction"),
+        plotOutput("cryptoConfusionMatrix", height = "650px"))
+        #dataTableOutput("cryptoConfusionMatrix"))
+        #uiOutput("cryptoInfoPrediction"))
+  })
+  
 
 
   ############################################################################

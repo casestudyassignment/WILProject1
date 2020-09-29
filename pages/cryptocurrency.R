@@ -4,7 +4,6 @@ library(shinydashboard)
 library(shiny)
 
 tab_crypto_visualisation <- tabItem(tabName = "dataVisCrypto",
-                                    h2("Data Visualisation for Covid Crypto Currency"),
                                     tabsetPanel(
                                       tabPanel("Data Viewer",
                                                class = "data_viewer",
@@ -19,28 +18,21 @@ tab_crypto_visualisation <- tabItem(tabName = "dataVisCrypto",
                                       )
                                     ),
                                     tabPanel("Data Visualisation",
-                                             inputPanel(selectInput("SelectedCryptoPlot",
-                                                                    label="Select one",
-                                                                    choices=c("BCH-AUD", "BNB-AUD", "BTC-AUD", "EOS-AUD", "ETH-AUD", 
-                                                                              "LINK-AUD", "LTC-AUD", "TRX-AUD", "USDT-AUD", "XRP-AUD"))),
-                                             fluidPage(conditionalPanel(
-                                               condition = "input.SelectedCryptoPlot != ''",
-                                               fluidRow(uiOutput("cryptoPlot")
-                                               ))
+                                             h2("Data Visualisation for Covid Crypto Currency")
+                                             )
                                     )
-    )
-  )
-)
+                                    )
 
 tab_crypto_modelling <- tabItem(tabName = "dataModelCrypto",
                                 h2("Data Modelling for Covid Government Crypto Currency"),
                                 fluidPage(
-                                  selectInput("CM",label = "Select one:",
+                                  selectInput("SelectedCryptoCM",label = "Select one:",
                                               c("BCH-AUD", "BNB-AUD", "BTC-AUD", "EOS-AUD", "ETH-AUD", 
                                               "LINK-AUD", "LTC-AUD", "TRX-AUD", "USDT-AUD", "XRP-AUD")),
                                   conditionalPanel(
-                                    condition = "input.CM != ''",
-                                    fluidRow(uiOutput("selected_crypto")
+                                    condition = "input.SelectedCryptoCM != ''",
+                                    fluidPage(
+                                      fluidRow(uiOutput("cryptoPlotPredictionBox"))
                                     )
                                 )
                                 
