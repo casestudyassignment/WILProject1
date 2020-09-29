@@ -13,6 +13,7 @@ library(DT)
 library(tidyquant)
 
 source('servers/util.R')
+setwd("C:/GitHub/WILProject1")
 
 getDisplayCryptoData <- function(input, output){
   data <- read_csv(paste0("data/", input, "_low.csv"))
@@ -34,11 +35,11 @@ getCryptoPlot <- function(input, output) {
 
   # cryptoplot
   cryptoPlot <- cryptoData %>%
-    ggplot(aes(x = date, y = close)) +
+    ggplot(aes(x = date, y = open)) +
     labs(x = "Date 2020", y = "close price (AUD)") +
-    geom_point(data = cryptoData[cryptoData$test != 'training',], aes(colour = test)) +
+    geom_point(data = cryptoData[cryptoData$test != 'training',], aes(colour = pred)) +
     geom_line() +
-    coord_x_date(xlim = c("2020-01-01", "2020-09-01"))
+    coord_x_date(xlim = c("2020-01-20", "2020-02-30"), ylim = c(0, 1000))
 
   return(cryptoPlot)
 }
